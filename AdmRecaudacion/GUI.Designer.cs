@@ -46,7 +46,7 @@
             // 
             // btnAceptar
             // 
-            this.btnAceptar.Location = new System.Drawing.Point(851, 409);
+            this.btnAceptar.Location = new System.Drawing.Point(770, 409);
             this.btnAceptar.Name = "btnAceptar";
             this.btnAceptar.Size = new System.Drawing.Size(75, 23);
             this.btnAceptar.TabIndex = 0;
@@ -163,7 +163,8 @@
             // 
             // btnGuardar
             // 
-            this.btnGuardar.Location = new System.Drawing.Point(770, 409);
+            this.btnGuardar.Enabled = false;
+            this.btnGuardar.Location = new System.Drawing.Point(851, 409);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(75, 23);
             this.btnGuardar.TabIndex = 11;
@@ -189,7 +190,6 @@
             this.Controls.Add(this.shapeContainer1);
             this.Name = "GUI";
             this.Text = "Recaudacion";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GUI_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

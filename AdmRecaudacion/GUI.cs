@@ -17,89 +17,155 @@ namespace AdmRecaudacion
 {
     public partial class GUI : Form
     {
-        private string Banco, url;
+        private string Banco, Url;
 
         public GUI()
         {
             InitializeComponent();
         }
 
+        private void rBtn1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rBtn1.Checked)
+            {
+                txtboxOpen.Enabled = false;
+                btnOpen.Enabled = false;
+            }
+        }
+
+        private void rBtn2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rBtn2.Checked)
+            {
+                txtboxOpen.Enabled = true;
+                btnOpen.Enabled = true;
+            }
+        }
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+
+            //opeFileDialogo.InitialDirectory = "C:\\VisualEstudio\\AdmRecaudacion\\AdmRecaudacion\\doc";
+            opeFileDialogo.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            opeFileDialogo.Filter = "Archivos de texto (*.txt)|*.txt|Archivo de datos (*.dbf)|*.dbf|Todo los archivos (*.*)|*.*";
+            opeFileDialogo.Title = "Seleccionar un archivo de banco";
+
+            if (opeFileDialogo.ShowDialog() == DialogResult.OK)
+            {
+                txtboxOpen.Text = opeFileDialogo.FileName;
+                txtboxOpen.ForeColor = Color.Black;
+            }
+        }
+
         private void cbxListBancos_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
-            switch(cbxListBancos.SelectedItem.ToString())
+            switch (cbxListBancos.SelectedItem.ToString())
             {
                 case "BANCO DE CREDITO DEL PERU":
                     Banco = "BCP";
+                    Url = "http://";
                     break;
                 case "BANCO INTERBANK":
                     Banco = "INB";
+                    Url = "http://";
                     break;
                 case "BBVA BANCO CONTINENTAL":
                     Banco = "BBVA";
+                    Url = "http://";
                     break;
                 case "SCOTIABANK PERU SAA":
                     Banco = "SCB";
+                    Url = "http://";
                     break;
             }
+            cbxListBancos.ForeColor = Color.Black;
             btnAceptar.Select();
             btnAceptar.Focus();
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
+            if (cbxListBancos.SelectedItem == null)
+            {
+                MessageBox.Show("Seleccionar una Financiera.");
+                cbxListBancos.ForeColor = Color.Red;
+                return;
+            }
+
             if (rBtn2.Checked)
             {
                 string path = @txtboxOpen.Text;
-                string ext = Path.GetExtension(path).ToLower();
-                if (ext.Equals(".dbf"))
+                
+                if(File.Exists(path))
                 {
-                    importDBF(path);
+                    string ext = Path.GetExtension(path).ToLower();
+                    if (ext.Equals(".dbf"))
+                    {
+                        importDBF(path);
+                    }
+                    else
+                    {
+                        switch (Banco)
+                        {
+                            case "BCP":
+                                interpreteCREP_BCP(path);
+                                break;
+                            case "INB":
+                                //interpreteCREP_BCP(path);
+                                break;
+                            case "BBVA":
+                                //interpreteCREP_BCP(path);
+                                break;
+                            case "SCB":
+                                //interpreteCREP_BCP(path);
+                                break;
+                        }
+                        
+                    }
+                    btnGuardar.Enabled = true;
                 }
                 else
                 {
-                    interpreteCREP(path);
+                    MessageBox.Show("La dirección no es la correcta: " + path);
+                    txtboxOpen.ForeColor = Color.Red;
+                    return;
                 }
-                
+
             }
             else
             {
                 if (rBtn1.Checked)
                 {
-                    //descargarArchivo();
-                    interpreteCREP(@"CREP1109 27.10.txt");
+                    descargarArchivo(Url, Banco);
+                    interpreteCREP_BCP(@Banco + ".txt");
+                    btnGuardar.Enabled = true;
                 }
             }
         }
 
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            string path = "C:\\VisualEstudio\\AdmRecaudacion\\AdmRecaudacion\\doc\\backup.dbf";
+            DataTable tdb = dataGridView1.DataSource as DataTable;
+            dbase.DataTableIntoDBF(path, tdb);//("backup.DBF",tdb);
+        }
+
+/***************************************************************************/
+
         private void descargarArchivo(string remoteUri, string txtBanco)
         {
+            txtBanco = txtBanco + ".txt";
             WebClient myWebClient = new WebClient();
             myWebClient.DownloadFile(remoteUri, txtBanco);
         }
 
-        //public static void Main()
-        //{
-        //    string path = @"c:\temp\MyTest.txt";
-        //    if (!File.Exists(path))
-        //    {
-        //        // Create a file to write to.
-        //        using (StreamWriter sw = File.CreateText(path))
-        //        {
-        //            sw.WriteLine("Hello");
-        //            sw.WriteLine("And");
-        //            sw.WriteLine("Welcome");
-        //        }
-        //    }
-        //}
-
-        private int interpreteCREP(string path)
+        private int interpreteCREP_BCP(string path)
         {
 
             //string path = @"CREP1109 27.10.txt";
             int counter = 0, numVal = -1;
-            string line, fecha, key, suc, ope;          
-           
+            string line, fecha, key, suc, ope;
+
             if (!File.Exists(path))
             {
                 return counter;
@@ -114,39 +180,26 @@ namespace AdmRecaudacion
             {
                 while ((line = sr.ReadLine()) != null)
                 {
-                    if (line.Substring(0, 2).Equals("CC") && counter==0)
+                    if (line.Substring(0, 2).Equals("CC") && counter == 0)
                     {
-                        
+
                         try
                         {
-                            numVal = Convert.ToInt32(line.Substring(22,9));
+                            numVal = Convert.ToInt32(line.Substring(22, 9));
                         }
                         catch (FormatException e)
                         {
                             e.ToString();
-                            //Console.WriteLine("Input string is not a sequence of digits.");
                         }
                         catch (OverflowException e)
                         {
                             e.ToString();
-                            //Console.WriteLine("The number cannot fit in an Int32.");
-                        }
-                        finally
-                        {
-                            //if (numVal < Int32.MaxValue)
-                            //{
-                            //    Console.WriteLine("The new value is {0}", numVal + 1);
-                            //}
-                            //else
-                            //{
-                            //    Console.WriteLine("numVal cannot be incremented beyond its current value");
-                            //}
                         }
 
                         if (numVal > 0)
                         {
                             #region Cabecera Tabla BCP
-                                                        
+
                             data = new DataTable("Recaudacion");
 
                             column = new DataColumn();
@@ -193,7 +246,7 @@ namespace AdmRecaudacion
                         }
 
                     }
-                    if (line.Substring(0,2).Equals("DD") && data!=null && numVal > 0) 
+                    if (line.Substring(0, 2).Equals("DD") && data != null && numVal > 0)
                     {
                         try
                         {
@@ -204,7 +257,7 @@ namespace AdmRecaudacion
                             row["fecha"] = Convert.ToDateTime(fecha);
                             row["indicador"] = Convert.ToChar(line.Substring(186, 1));
                             row["moneda"] = line.Substring(5, 1);
-                            row["importe"] = Convert.ToInt32(line.Substring(73, 15))/100;
+                            row["importe"] = Convert.ToInt32(line.Substring(73, 15)) / 100;
                             suc = line.Substring(118, 6);
                             //numero de operacion
                             ope = line.Substring(124, 6);
@@ -218,12 +271,10 @@ namespace AdmRecaudacion
                         catch (FormatException e)
                         {
                             e.ToString();
-                            //Console.WriteLine("Input string is not a sequence of digits.");
                         }
                         catch (OverflowException e)
                         {
                             e.ToString();
-                            //Console.WriteLine("The number cannot fit in an Int32.");
                         }
                         catch (ArgumentNullException e)
                         {
@@ -231,73 +282,28 @@ namespace AdmRecaudacion
                         }
                         counter++;
                     }
-                    
+
                 }
             }
-            if (data != null )
+            if (data != null)
                 dataGridView1.DataSource = data;
             return counter;
 
         }
-
-        private void btnOpen_Click(object sender, EventArgs e)
-        {
-            opeFileDialogo.InitialDirectory = "C:\\VisualEstudio\\AdmRecaudacion\\AdmRecaudacion\\doc";
-            opeFileDialogo.Filter = "Archivos de texto (*.txt)|*.txt|Todo los archivos (*.*)|*.*";
-            opeFileDialogo.Title = "Seleccionar un archivo de banco";
-
-            if (opeFileDialogo.ShowDialog() == DialogResult.OK)
-            {
-                txtboxOpen.Text = opeFileDialogo.FileName;
-            }
-        }
-
-        private void rBtn1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rBtn1.Checked)
-            {
-                txtboxOpen.Enabled = false;
-                btnOpen.Enabled = false;
-            }
-        }
-
-        private void rBtn2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rBtn2.Checked)
-            {
-                txtboxOpen.Enabled = true;
-                btnOpen.Enabled = true;
-            }
-        }
-
-        private void GUI_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-
-            }
-        }
-
+        
         private void importDBF(string path)
         {
             string nomBD = Path.GetFileName(path);
             string dirDB = Path.GetFullPath(path).Replace(nomBD, "");
             using (var oleDbConnection = dbase.Conectar(dirDB))
             {
-                using (var da = dbase.adapter(oleDbConnection,"SELECT * FROM [" + nomBD + "]"))
+                using (var da = dbase.adapter(oleDbConnection, "SELECT * FROM [" + nomBD + "]"))
                 {
                     DataTable dt = new DataTable();
                     da.Fill(dt);
                     dataGridView1.DataSource = dt;
                 }
             }
-        }
-
-        private void btnGuardar_Click(object sender, EventArgs e)
-        {
-            string path = "C:\\VisualEstudio\\AdmRecaudacion\\AdmRecaudacion\\doc\\backup.dbf";
-            DataTable tdb = dataGridView1.DataSource as DataTable;
-            dbase.DataTableIntoDBF(path,tdb);//("backup.DBF",tdb);
         }
 
         private string prepareToCompareString(string s)
@@ -316,5 +322,6 @@ namespace AdmRecaudacion
             s = s.ToUpper().Replace(" ", "");
             return s;
         }
+
     }
 }
