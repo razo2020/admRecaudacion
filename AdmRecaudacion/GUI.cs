@@ -17,6 +17,8 @@ namespace AdmRecaudacion
 {
     public partial class GUI : Form
     {
+        private string Banco, url;
+
         public GUI()
         {
             InitializeComponent();
@@ -24,13 +26,24 @@ namespace AdmRecaudacion
 
         private void cbxListBancos_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
+            switch(cbxListBancos.SelectedItem.ToString())
+            {
+                case "BANCO DE CREDITO DEL PERU":
+                    Banco = "BCP";
+                    break;
+                case "BANCO INTERBANK":
+                    Banco = "INB";
+                    break;
+                case "BBVA BANCO CONTINENTAL":
+                    Banco = "BBVA";
+                    break;
+                case "SCOTIABANK PERU SAA":
+                    Banco = "SCB";
+                    break;
+            }
             btnAceptar.Select();
             btnAceptar.Focus();
-        }
-
-        private void btnCerrar_Click(object sender, EventArgs e)
-        {
-            Close();
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
@@ -53,20 +66,16 @@ namespace AdmRecaudacion
             {
                 if (rBtn1.Checked)
                 {
-                    descargarArchivo();
+                    //descargarArchivo();
                     interpreteCREP(@"CREP1109 27.10.txt");
                 }
             }
         }
 
-        private void descargarArchivo()
+        private void descargarArchivo(string remoteUri, string txtBanco)
         {
-            string remoteUri = "http://www.sbs.gob.pe/app/xmltipocambio/";
-            string fileName = "TC_TI_Portal_xml.xml", myStringWebResource = null;
             WebClient myWebClient = new WebClient();
-            myStringWebResource = remoteUri + fileName;
-            fileName = "TC.xml";
-            myWebClient.DownloadFile(myStringWebResource, fileName);
+            myWebClient.DownloadFile(remoteUri, txtBanco);
         }
 
         //public static void Main()
@@ -137,8 +146,7 @@ namespace AdmRecaudacion
                         if (numVal > 0)
                         {
                             #region Cabecera Tabla BCP
-                            
-                            
+                                                        
                             data = new DataTable("Recaudacion");
 
                             column = new DataColumn();
@@ -237,16 +245,10 @@ namespace AdmRecaudacion
             opeFileDialogo.InitialDirectory = "C:\\VisualEstudio\\AdmRecaudacion\\AdmRecaudacion\\doc";
             opeFileDialogo.Filter = "Archivos de texto (*.txt)|*.txt|Todo los archivos (*.*)|*.*";
             opeFileDialogo.Title = "Seleccionar un archivo de banco";
-            //opeFileDialogo.FilterIndex = 2;
-            //opeFileDialogo.RestoreDirectory = true;
 
             if (opeFileDialogo.ShowDialog() == DialogResult.OK)
             {
-                //StreamReader sr = new StreamReader(opeFileDialogo.FileName);
-                //MessageBox.Show(sr.ReadToEnd());
-                //sr.Close();
                 txtboxOpen.Text = opeFileDialogo.FileName;
-                //MessageBox.Show(opeFileDialogo.FileName);
             }
         }
 
@@ -276,7 +278,6 @@ namespace AdmRecaudacion
             }
         }
 
-
         private void importDBF(string path)
         {
             string nomBD = Path.GetFileName(path);
@@ -290,125 +291,13 @@ namespace AdmRecaudacion
                     dataGridView1.DataSource = dt;
                 }
             }
-            //using (OleDbConnection oleDbConnection = new OleDbConnection())
-            //{
-            //    oleDbConnection.ConnectionString = GetConnection(dirDB);
-            //    OleDbCommand oleDbCommand = new OleDbCommand();
-            //    oleDbCommand.CommandText = "SELECT * FROM [" + nomBD + "]";
-            //    oleDbCommand.Connection = oleDbConnection;
-            //    using (OleDbDataAdapter da = new OleDbDataAdapter(oleDbCommand))
-            //    {
-            //        DataTable dt = new DataTable();
-            //        da.Fill(dt);
-            //        dataGridView1.DataSource = dt;
-            //    }
-            //}
         }
-
-        public static void DataTableIntoDBF(string path, DataTable data)
-        {
-            # region mydata
-            string nomBD = Path.GetFileName(path);
-            string dirDB = Path.GetFullPath(path).Replace(nomBD, "");
-            nomBD = nomBD.Replace(".dbf", "");
-            ArrayList list = new ArrayList();
-
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-
-            string createSql = "create table " + nomBD + " (";
-
-            foreach (DataColumn dc in data.Columns)
-            {
-                string fieldName = dc.ColumnName;
-                string type = dc.DataType.ToString();
-
-                switch (type)
-                {
-                    case "System.Char":
-                        type = "varchar(1)";
-                        break;
-
-                    case "System.String":
-                        type = "varchar(100)";
-                        break;
-
-                    case "System.Boolean":
-                        type = "varchar(10)";
-                        break;
-
-                    case "System.Int32":
-                        type = "int";
-                        break;
-
-                    case "System.Double":
-                        type = "Double";
-                        break;
-
-                    case "System.DateTime":
-                        type = "TimeStamp";
-                        break;
-                }
-                createSql = createSql + "[" + fieldName + "]" + " " + type + ",";
-                list.Add(fieldName);
-            }
-
-            createSql = createSql.Substring(0, createSql.Length - 1) + ")";
-            #endregion
-
-            var con = dbase.ConectarT();
-
-            OleDbCommand cmd = new OleDbCommand();
-            cmd.CommandText = createSql;
-            cmd.Connection = con;
-            con.Open();
-            //cmd.Connection.Open();
-            cmd.ExecuteNonQuery();
-            //con.Close();
-
-            //con = dbase.Conectar();
-
-            //string insertSql = "insert into " + nomBD + " values ";
-            foreach (DataRow row in data.Rows)
-            {
-                string insertSql = "insert into " + nomBD + " values (";
-                for (int i = 0; i < list.Count; i++)
-                {
-                    insertSql = insertSql + "'" + row[list[i].ToString()].ToString().Replace("'", "''") + "',";
-                }
-                insertSql = insertSql.Substring(0, insertSql.Length - 1) + ")";
-                cmd.CommandText = insertSql;
-                //cmd.Connection = con;
-                //con.Open();
-                cmd.ExecuteNonQuery();
-            }
-            //insertSql = insertSql.Substring(0, insertSql.Length - 1)+";";
-            //cmd.CommandText = insertSql;
-            //cmd.Connection = con;
-            //con.Open();
-            //cmd.ExecuteNonQuery();
-            con.Close();
-            
-        }
-
-        //private static string GetConnection(string strDireccion)
-        //{
-        //    return "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + strDireccion + ";Extended Properties=dBASE IV;";
-        //}
-
-        //public static string ReplaceEscape(string str)
-        //{
-        //    str = str.Replace("'", "''");
-        //    return str;
-        //}
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             string path = "C:\\VisualEstudio\\AdmRecaudacion\\AdmRecaudacion\\doc\\backup.dbf";
             DataTable tdb = dataGridView1.DataSource as DataTable;
-            DataTableIntoDBF(path,tdb);//("backup.DBF",tdb);
+            dbase.DataTableIntoDBF(path,tdb);//("backup.DBF",tdb);
         }
 
         private string prepareToCompareString(string s)

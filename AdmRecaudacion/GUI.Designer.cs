@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.btnAceptar = new System.Windows.Forms.Button();
-            this.btnCerrar = new System.Windows.Forms.Button();
             this.cbxListBancos = new System.Windows.Forms.ComboBox();
             this.lblNomLista = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -47,23 +46,13 @@
             // 
             // btnAceptar
             // 
-            this.btnAceptar.Location = new System.Drawing.Point(770, 409);
+            this.btnAceptar.Location = new System.Drawing.Point(851, 409);
             this.btnAceptar.Name = "btnAceptar";
             this.btnAceptar.Size = new System.Drawing.Size(75, 23);
             this.btnAceptar.TabIndex = 0;
-            this.btnAceptar.Text = "Aceptar";
+            this.btnAceptar.Text = "Abrir";
             this.btnAceptar.UseVisualStyleBackColor = true;
             this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
-            // 
-            // btnCerrar
-            // 
-            this.btnCerrar.Location = new System.Drawing.Point(851, 409);
-            this.btnCerrar.Name = "btnCerrar";
-            this.btnCerrar.Size = new System.Drawing.Size(75, 23);
-            this.btnCerrar.TabIndex = 1;
-            this.btnCerrar.Text = "Cerrar";
-            this.btnCerrar.UseVisualStyleBackColor = true;
-            this.btnCerrar.Click += new System.EventHandler(this.btnCerrar_Click);
             // 
             // cbxListBancos
             // 
@@ -103,7 +92,7 @@
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(75, 23);
             this.btnOpen.TabIndex = 5;
-            this.btnOpen.Text = "Abrir";
+            this.btnOpen.Text = "Buscar";
             this.btnOpen.UseVisualStyleBackColor = true;
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
@@ -174,7 +163,7 @@
             // 
             // btnGuardar
             // 
-            this.btnGuardar.Location = new System.Drawing.Point(15, 409);
+            this.btnGuardar.Location = new System.Drawing.Point(770, 409);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(75, 23);
             this.btnGuardar.TabIndex = 11;
@@ -196,7 +185,6 @@
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.lblNomLista);
             this.Controls.Add(this.cbxListBancos);
-            this.Controls.Add(this.btnCerrar);
             this.Controls.Add(this.btnAceptar);
             this.Controls.Add(this.shapeContainer1);
             this.Name = "GUI";
@@ -211,7 +199,6 @@
         #endregion
 
         private System.Windows.Forms.Button btnAceptar;
-        private System.Windows.Forms.Button btnCerrar;
         private System.Windows.Forms.ComboBox cbxListBancos;
         private System.Windows.Forms.Label lblNomLista;
         private System.Windows.Forms.DataGridView dataGridView1;
