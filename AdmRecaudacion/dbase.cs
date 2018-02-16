@@ -93,7 +93,7 @@ namespace AdmRecaudacion
             createSql = createSql.Substring(0, createSql.Length - 1) + ")";
             #endregion
 
-            var con = Conectar();
+            var con = Conectar(dirDB);
 
             OleDbCommand cmd = new OleDbCommand();
             cmd.CommandText = createSql;

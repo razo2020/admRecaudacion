@@ -111,12 +111,15 @@ namespace AdmRecaudacion
                                 interpreteCREP_BCP(path);
                                 break;
                             case "INB":
+                                MessageBox.Show("No existe operacion INB.");
                                 //interpreteCREP_BCP(path);
                                 break;
                             case "BBVA":
+                                MessageBox.Show("No existe operacion BBVA.");
                                 //interpreteCREP_BCP(path);
                                 break;
                             case "SCB":
+                                MessageBox.Show("No existe operacion SCB.");
                                 //interpreteCREP_BCP(path);
                                 break;
                         }
@@ -136,18 +139,29 @@ namespace AdmRecaudacion
             {
                 if (rBtn1.Checked)
                 {
-                    descargarArchivo(Url, Banco);
-                    interpreteCREP_BCP(@Banco + ".txt");
-                    btnGuardar.Enabled = true;
+                    MessageBox.Show("No esta habilitado esta opcion.");
+                    //descargarArchivo(Url, Banco);
+                    //interpreteCREP_BCP(@Banco + ".txt");
+                    //btnGuardar.Enabled = true;
                 }
             }
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            string path = "C:\\VisualEstudio\\AdmRecaudacion\\AdmRecaudacion\\doc\\backup.dbf";
-            DataTable tdb = dataGridView1.DataSource as DataTable;
-            dbase.DataTableIntoDBF(path, tdb);//("backup.DBF",tdb);
+            saveFileDialogG.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            saveFileDialogG.Filter = "Archivo de datos (*.dbf)|*.dbf";
+            saveFileDialogG.Title = "Guardar un la BD del Banco";
+
+            if (saveFileDialogG.ShowDialog() == DialogResult.OK)
+            {
+                string path = saveFileDialogG.FileName;
+                DataTable tdb = dataGridView1.DataSource as DataTable;
+                dbase.DataTableIntoDBF(path, tdb);
+            }
+            //string path = "C:\\VisualEstudio\\AdmRecaudacion\\AdmRecaudacion\\doc\\backup.dbf";
+            //DataTable tdb = dataGridView1.DataSource as DataTable;
+            //dbase.DataTableIntoDBF(path, tdb);//("backup.DBF",tdb);
         }
 
 /***************************************************************************/

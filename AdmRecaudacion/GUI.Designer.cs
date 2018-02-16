@@ -41,6 +41,7 @@
             this.rBtn2 = new System.Windows.Forms.RadioButton();
             this.shapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
             this.btnGuardar = new System.Windows.Forms.Button();
+            this.saveFileDialogG = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -211,6 +212,7 @@
         private System.Windows.Forms.RadioButton rBtn2;
         private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
         private System.Windows.Forms.Button btnGuardar;
+        private System.Windows.Forms.SaveFileDialog saveFileDialogG;
     }
 }
 
