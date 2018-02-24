@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace AdmRecaudacion
 {
@@ -114,6 +116,8 @@ namespace AdmRecaudacion
             con.Close();
 
         }
+
+        
 
     }
 }
