@@ -229,6 +229,7 @@ namespace AdmRecaudacion
                             #region Cabecera Tabla BCP
 
                             data = new DataTable("Recaudacion");
+                            //var FG = Config.leerXML(Banco, "CREP");
                             elementos = Config.leerXML(Banco, "CREP");
                             foreach (Config.Element elemento in elementos)
                             {
@@ -239,13 +240,22 @@ namespace AdmRecaudacion
                                         column.DataType = Type.GetType("System.String");
                                         break;
                                     case "int":
-                                        column.DataType = Type.GetType("System.int");
+                                        column.DataType = typeof(int);
                                         break;
                                     case "short":
-                                        column.DataType = Type.GetType("System.short");
+                                        column.DataType = typeof(short);
                                         break;
                                     case "char":
-                                        column.DataType = Type.GetType("System.char");
+                                        column.DataType = typeof(char);
+                                        break;
+                                    case "date":
+                                        column.DataType = typeof(DateTime);
+                                        break;
+                                    case "byte":
+                                        column.DataType = typeof(Byte);
+                                        break;
+                                    case "double":
+                                        column.DataType = typeof(double);
                                         break;
                                 }
                                 column.ColumnName = elemento.key;
@@ -264,46 +274,47 @@ namespace AdmRecaudacion
                     {
                         try
                         {
+                            row = data.NewRow();
+
                             foreach (Config.Element elemento in elementos)
                             {
-                                row = data.NewRow();
-                                switch (elemento.type)
+                                var str = line.Substring(elemento.valueX, elemento.valueY);
+                                var tipo = elemento.type;
+                                if (str.Trim().Equals("") && tipo!="string")
+                                {
+                                    str = "0";
+                                }
+
+                                switch (tipo)
                                 {
                                     //case "string":
                                     //    row[elemento.key] = line.Substring(elemento.valueX, elemento.valueY);
                                     //    break;
                                     case "int":
-                                        row[elemento.key] = Convert.ToInt32(line.Substring(elemento.valueX, elemento.valueY));
+                                        row[elemento.key] = Convert.ToInt32(str);
                                         break;
                                     case "short":
-                                        row[elemento.key] = Convert.ToInt16(line.Substring(elemento.valueX, elemento.valueY));
+                                        row[elemento.key] = Convert.ToInt16(str);
                                         break;
                                     case "char":
-                                        row[elemento.key] =Convert.ToChar(line.Substring(elemento.valueX, elemento.valueY));
+                                        row[elemento.key] = Convert.ToChar(str);
                                         break;
                                     case "date":
-                                        fecha = line.Substring(elemento.valueX, elemento.valueY);
-                                        fecha = fecha.Substring(6, 2) + "/" + fecha.Substring(4, 2) + "/" + fecha.Substring(0, 4);
+                                        fecha = str.Substring(6, 2) + "/" + str.Substring(4, 2) + "/" + str.Substring(0, 4);
                                         row[elemento.key] = Convert.ToDateTime(fecha);
                                         break;
+                                    case "byte":
+                                        row[elemento.key] = Convert.ToByte(str);
+                                        break;
+                                    case "double":
+                                        row[elemento.key] = Convert.ToDouble(str);
+                                        break;
                                     default :
-                                        row[elemento.key] = line.Substring(elemento.valueX, elemento.valueY);
+                                        row[elemento.key] = str;
                                         break;
                                 }
-                                
                             }
-                            //row["indicador"] = Convert.ToChar(line.Substring(186, 1));
-                            //row["moneda"] = line.Substring(5, 1);
-                            //row["importe"] = Convert.ToInt32(line.Substring(73, 15)) / 100;
-                            //suc = line.Substring(118, 6);
-                            ////numero de operacion
-                            //ope = line.Substring(124, 6);
-                            ////key
-                            //key = suc + ope;
-                            //row["sucursal"] = suc;
-                            //row["operacion"] = ope;
-                            //row["key-ope"] = key;
-                            //data.Rows.Add(row);
+                            data.Rows.Add(row);
                         }
                         catch (FormatException e)
                         {
@@ -311,11 +322,11 @@ namespace AdmRecaudacion
                         }
                         catch (OverflowException e)
                         {
-                            e.ToString();
+                            MessageBox.Show(e.ToString());
                         }
                         catch (ArgumentNullException e)
                         {
-                            e.ToString();
+                            MessageBox.Show(e.ToString());
                         }
                         counter++;
                     }

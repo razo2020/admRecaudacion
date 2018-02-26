@@ -16,7 +16,7 @@
       <col key="COD-OFI" valueX="118" valueY="6" type="int" />
       <col key="NRO-OPE" valueX="124" valueY="6" type="int" />
 
-      <col key="COD-BAN" valueX="184" valueY="2" type="byte" />
+      <!--col key="COD-BAN" valueX="184" valueY="2" type="byte" /-->
       <col key="IND-BCO" valueX="186" valueY="1" type="char" />
       <col key="NRO-OPE-BD" valueX="187" valueY="8" type="int" />
       <col key="NRO-OPE-CAN" valueX="195" valueY="8" type="int" />
@@ -40,4 +40,7 @@
       <col key="COD-BAN" valueX="184" valueY="2" type="byte" />
     </CONF>
   </BANCO>
+  <BANCO name="INTER"/>
+  <BANCO name="FWQ"/>
+  <BANCO name="RWW"/>
 </BANCOS>

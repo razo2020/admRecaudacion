@@ -64,16 +64,19 @@ namespace AdmRecaudacion
 
                 switch (type)
                 {
+                    case "System.Int16":
+                        type = "int";
+                        break;
                     case "System.Char":
-                        type = "varchar(1)";
+                        type = "varchar(4)";
                         break;
 
                     case "System.String":
-                        type = "varchar(100)";
+                        type = "varchar(20)";
                         break;
 
                     case "System.Boolean":
-                        type = "varchar(10)";
+                        type = "logical";
                         break;
 
                     case "System.Int32":
@@ -81,11 +84,17 @@ namespace AdmRecaudacion
                         break;
 
                     case "System.Double":
-                        type = "Double";
+                        type = "double";
                         break;
 
                     case "System.DateTime":
                         type = "TimeStamp";
+                        break;
+                    case "System.Short":
+                        type = "int";
+                        break;
+                    case "System.Byte":
+                        type = "int";
                         break;
                 }
                 createSql = createSql + "[" + fieldName + "]" + " " + type + ",";
@@ -116,8 +125,5 @@ namespace AdmRecaudacion
             con.Close();
 
         }
-
-        
-
     }
 }
