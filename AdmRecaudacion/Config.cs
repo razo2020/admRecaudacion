@@ -17,19 +17,21 @@ namespace AdmRecaudacion
             public string type { get; set; }
             public int valueX { get; set; }
             public int valueY { get; set; }
+            public Element[] url { get; set; }
+            public override string ToString() { return key +": "+ titulo; }
         }
 
-        public static List<Element> leerXML(string Banco, string Config)
+        public static List<Element> leerColumnasXML(string Banco, string Config)
         {
             //Load xml
             XElement root = XElement.Load(@"Bancos.XML");
 
             var bancos = from banco in root.Elements("BANCO")
-                        where (string)banco.Attribute("name") == Banco
+                        where (string)banco.Attribute("key") == Banco
                         select banco;
 
             var confi = from conf in bancos.Elements("CONF")
-                        where (string)conf.Attribute("name") == Config
+                        where (string)conf.Attribute("key") == Config
                         select conf;
             var column = from col in confi.Elements("col")
                 select new Element
@@ -44,5 +46,26 @@ namespace AdmRecaudacion
             return elementos;
             //return consulta;
         }//Fin de metdo leerXML.
+
+        public static Element[] leerBancosXML()
+        {
+            XElement root = XElement.Load(@"Bancos.XML");
+            var bancos = from banco in root.Elements("BANCO")
+                         let rem = from conf in banco.Elements("CONF")
+                                   select new Element
+                                   {
+                                       key = (string)conf.Attribute("key").Value,
+                                       titulo = (string)conf.Attribute("url").Value
+                                   }
+                         select new Element
+                         {
+                             key = (string)banco.Attribute("key").Value,
+                             titulo = (string)banco.Attribute("name").Value,
+                             url = rem.ToArray<Element>()
+                         };
+
+            Element[] elementos = bancos.ToArray<Element>();
+            return elementos;
+        }
     }
 }

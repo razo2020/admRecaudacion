@@ -18,11 +18,17 @@ namespace AdmRecaudacion
 {
     public partial class GUI : Form
     {
-        private string Banco, Url;
+        private Config.Element banco, confi;
 
         public GUI()
         {
             InitializeComponent();
+        }
+
+        private void GUI_Load(object sender, EventArgs e)
+        {
+            Config.Element[] items = Config.leerBancosXML();
+            cbxListBancos.Items.AddRange(items);
         }
 
         // evento cuando se cambia de seleccion (online) 
@@ -74,26 +80,19 @@ namespace AdmRecaudacion
         private void cbxListBancos_SelectedIndexChanged(object sender, EventArgs e)
         {
             //se comprueba la seleccion para cada caso.
-            switch (cbxListBancos.SelectedItem.ToString())
-            {
-                case "BANCO DE CREDITO DEL PERU":
-                    Banco = "BCP";
-                    Url = "http://";
-                    break;
-                case "BANCO INTERBANK":
-                    Banco = "INB";
-                    Url = "http://";
-                    break;
-                case "BBVA BANCO CONTINENTAL":
-                    Banco = "BBVA";
-                    Url = "http://";
-                    break;
-                case "SCOTIABANK PERU SAA":
-                    Banco = "SCB";
-                    Url = "http://";
-                    break;
-            }
             cbxListBancos.ForeColor = Color.Black;
+            var items = (Config.Element)cbxListBancos.SelectedItem;
+            cbxListConfig.Items.Clear();
+            cbxListConfig.Items.AddRange(items.url);
+            cbxListConfig.Select();
+            cbxListConfig.Focus();
+        }
+
+        //evento seleccionar configuracion de archivo
+        private void cbxListConfig_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            banco = (Config.Element)cbxListBancos.SelectedItem;
+            confi = (Config.Element)cbxListConfig.SelectedItem;
             btnAceptar.Select();
             btnAceptar.Focus();
         }
@@ -121,21 +120,21 @@ namespace AdmRecaudacion
                     }
                     else
                     {
-                        switch (Banco)
+                        switch (banco.key)
                         {
                             case "BCP":
-                                interpreteCREP_BCP(path);
+                                interpreteTXT_Banco(path);
                                 break;
                             case "INB":
-                                MessageBox.Show("No existe operacion." + Banco);
+                                MessageBox.Show("No existe operacion." + banco.titulo);
                                 //interpreteCREP_BCP(path);
                                 break;
                             case "BBVA":
-                                MessageBox.Show("No existe operacion." + Banco);
+                                MessageBox.Show("No existe operacion." + banco.titulo);
                                 //interpreteCREP_BCP(path);
                                 break;
                             case "SCB":
-                                MessageBox.Show("No existe operacion." + Banco);
+                                MessageBox.Show("No existe operacion." + banco.titulo);
                                 //interpreteCREP_BCP(path);
                                 break;
                         }
@@ -186,12 +185,11 @@ namespace AdmRecaudacion
             myWebClient.DownloadFile(remoteUri, txtBanco);
         }
 
-        private int interpreteCREP_BCP(string path)
+        private int interpreteTXT_Banco(string path)
         {
-
             //string path = @"CREP1109 27.10.txt";
             int counter = 0, numVal = -1;
-            string line, fecha, key, suc, ope;
+            string line, fecha;
 
             if (!File.Exists(path))
             {
@@ -227,10 +225,11 @@ namespace AdmRecaudacion
                         if (numVal > 0)
                         {
                             #region Cabecera Tabla BCP
-
+                            
                             data = new DataTable("Recaudacion");
                             //var FG = Config.leerXML(Banco, "CREP");
-                            elementos = Config.leerXML(Banco, "CREP");
+
+                            elementos = Config.leerColumnasXML(banco.key, confi.key);
                             foreach (Config.Element elemento in elementos)
                             {
                                 column = new DataColumn();
@@ -287,9 +286,6 @@ namespace AdmRecaudacion
 
                                 switch (tipo)
                                 {
-                                    //case "string":
-                                    //    row[elemento.key] = line.Substring(elemento.valueX, elemento.valueY);
-                                    //    break;
                                     case "int":
                                         row[elemento.key] = Convert.ToInt32(str);
                                         break;

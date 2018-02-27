@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <BANCOS>
-  <BANCO name="BCP">
-    <CONF name="CREP" url="">
+  <BANCO key="BCP" name="BANCO DE CREDITO DEL PERU">
+    <CONF key="CREP" url="">
       <col key="TIP-REG" valueX="0" valueY="2" type="string" >Tipo de Registro</col>
       <col key="COD-SUC" valueX="2" valueY="3" type="short" >Codigo de Sucursal</col>
       <col key="COD-MON" valueX="5" valueY="1" type="char" >Codigo de Moneda</col>
@@ -16,13 +16,13 @@
       <col key="COD-OFI" valueX="118" valueY="6" type="int" />
       <col key="NRO-OPE" valueX="124" valueY="6" type="int" />
 
-      <!--col key="COD-BAN" valueX="184" valueY="2" type="byte" /-->
+      <col key="COD-BAN" valueX="184" valueY="2" type="byte" />
       <col key="IND-BCO" valueX="186" valueY="1" type="char" />
       <col key="NRO-OPE-BD" valueX="187" valueY="8" type="int" />
       <col key="NRO-OPE-CAN" valueX="195" valueY="8" type="int" />
 
     </CONF>
-    <CONF name="CDPG" url="">
+    <CONF key="CDPG" url="">
       <col key="TIP-REG" valueX="0" valueY="2" type="string" />
       <col key="COD-SUC" valueX="2" valueY="3" type="short" />
       <col key="COD-MON" valueX="5" valueY="1" type="char" />
@@ -40,7 +40,7 @@
       <col key="COD-BAN" valueX="184" valueY="2" type="byte" />
     </CONF>
   </BANCO>
-  <BANCO name="INTER"/>
-  <BANCO name="FWQ"/>
-  <BANCO name="RWW"/>
+  <BANCO key="INB" name="BANCO INTERBANK"><CONF key="CREP" url=""> </CONF></BANCO>
+  <BANCO key="BBVA" name="BBVA BANCO CONTINENTAL"><CONF key="CREP" url=""> </CONF></BANCO>
+  <BANCO key="SCB" name="SCOTIABANK PERU SAA"><CONF key="CREP" url=""> </CONF></BANCO>
 </BANCOS>

@@ -42,6 +42,7 @@
             this.shapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.saveFileDialogG = new System.Windows.Forms.SaveFileDialog();
+            this.cbxListConfig = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,12 +59,7 @@
             // cbxListBancos
             // 
             this.cbxListBancos.FormattingEnabled = true;
-            this.cbxListBancos.Items.AddRange(new object[] {
-            "BANCO DE CREDITO DEL PERU",
-            "BANCO INTERBANK",
-            "BBVA BANCO CONTINENTAL",
-            "SCOTIABANK PERU SAA"});
-            this.cbxListBancos.Location = new System.Drawing.Point(12, 46);
+            this.cbxListBancos.Location = new System.Drawing.Point(15, 46);
             this.cbxListBancos.Name = "cbxListBancos";
             this.cbxListBancos.Size = new System.Drawing.Size(331, 21);
             this.cbxListBancos.TabIndex = 2;
@@ -81,9 +77,9 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(15, 73);
+            this.dataGridView1.Location = new System.Drawing.Point(15, 100);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(911, 330);
+            this.dataGridView1.Size = new System.Drawing.Size(911, 303);
             this.dataGridView1.TabIndex = 4;
             // 
             // btnOpen
@@ -114,8 +110,8 @@
             this.lineShape1.Name = "lineShape1";
             this.lineShape1.X1 = 411;
             this.lineShape1.X2 = 411;
-            this.lineShape1.Y1 = 7;
-            this.lineShape1.Y2 = 68;
+            this.lineShape1.Y1 = 10;
+            this.lineShape1.Y2 = 87;
             // 
             // lblOpen
             // 
@@ -173,11 +169,21 @@
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
+            // cbxListConfig
+            // 
+            this.cbxListConfig.FormattingEnabled = true;
+            this.cbxListConfig.Location = new System.Drawing.Point(15, 73);
+            this.cbxListConfig.Name = "cbxListConfig";
+            this.cbxListConfig.Size = new System.Drawing.Size(331, 21);
+            this.cbxListConfig.TabIndex = 12;
+            this.cbxListConfig.SelectedIndexChanged += new System.EventHandler(this.cbxListConfig_SelectedIndexChanged);
+            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(938, 444);
+            this.Controls.Add(this.cbxListConfig);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.rBtn2);
             this.Controls.Add(this.rBtn1);
@@ -191,6 +197,7 @@
             this.Controls.Add(this.shapeContainer1);
             this.Name = "GUI";
             this.Text = "Recaudacion";
+            this.Load += new System.EventHandler(this.GUI_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -213,6 +220,7 @@
         private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.SaveFileDialog saveFileDialogG;
+        private System.Windows.Forms.ComboBox cbxListConfig;
     }
 }
 

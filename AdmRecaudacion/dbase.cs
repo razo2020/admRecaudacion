@@ -44,7 +44,7 @@ namespace AdmRecaudacion
 
         public static void DataTableIntoDBF(string path, DataTable data)
         {
-            # region mydata
+            # region Interpretando Tabla obtenida
             string nomBD = Path.GetFileName(path);
             string dirDB = Path.GetFullPath(path).Replace(nomBD, "");
             nomBD = nomBD.Replace(".dbf", "");
@@ -123,7 +123,6 @@ namespace AdmRecaudacion
                 cmd.ExecuteNonQuery();
             }
             con.Close();
-
         }
     }
 }
