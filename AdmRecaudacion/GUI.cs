@@ -123,6 +123,7 @@ namespace AdmRecaudacion
                         switch (banco.key)
                         {
                             case "BCP":
+                                //dataGridView1.Rows.Clear();
                                 interpreteTXT_Banco(path);
                                 break;
                             case "INB":
@@ -206,70 +207,50 @@ namespace AdmRecaudacion
             {
                 while ((line = sr.ReadLine()) != null)
                 {
-                    if (line.Substring(0, 2).Equals("CC") && counter == 0)
+                    if (counter == 0)
                     {
+                        #region Cabecera Tabla BCP
 
-                        try
-                        {
-                            numVal = Convert.ToInt32(line.Substring(22, 9));
-                        }
-                        catch (FormatException e)
-                        {
-                            e.ToString();
-                        }
-                        catch (OverflowException e)
-                        {
-                            e.ToString();
-                        }
+                        data = new DataTable("Recaudacion");
 
-                        if (numVal > 0)
-                        {
-                            #region Cabecera Tabla BCP
-                            
-                            data = new DataTable("Recaudacion");
-                            //var FG = Config.leerXML(Banco, "CREP");
+                        elementos = Config.leerColumnasXML(banco.key, confi.key);
 
-                            elementos = Config.leerColumnasXML(banco.key, confi.key);
-                            foreach (Config.Element elemento in elementos)
+                        foreach (Config.Element elemento in elementos)
+                        {
+                            column = new DataColumn();
+                            switch (elemento.type)
                             {
-                                column = new DataColumn();
-                                switch (elemento.type)
-                                {
-                                    case "string":
-                                        column.DataType = Type.GetType("System.String");
-                                        break;
-                                    case "int":
-                                        column.DataType = typeof(int);
-                                        break;
-                                    case "short":
-                                        column.DataType = typeof(short);
-                                        break;
-                                    case "char":
-                                        column.DataType = typeof(char);
-                                        break;
-                                    case "date":
-                                        column.DataType = typeof(DateTime);
-                                        break;
-                                    case "byte":
-                                        column.DataType = typeof(Byte);
-                                        break;
-                                    case "double":
-                                        column.DataType = typeof(double);
-                                        break;
-                                }
-                                column.ColumnName = elemento.key;
-                                data.Columns.Add(column);
+                                case "string":
+                                    column.DataType = Type.GetType("System.String");
+                                    break;
+                                case "int":
+                                    column.DataType = typeof(int);
+                                    break;
+                                case "short":
+                                    column.DataType = typeof(short);
+                                    break;
+                                case "char":
+                                    column.DataType = typeof(char);
+                                    break;
+                                case "date":
+                                    column.DataType = typeof(DateTime);
+                                    break;
+                                case "byte":
+                                    column.DataType = typeof(Byte);
+                                    break;
+                                case "double":
+                                    column.DataType = typeof(double);
+                                    break;
                             }
-
-                            #endregion
-                        }
-                        else
-                        {
-                            break;
+                            column.ColumnName = elemento.key;
+                            column.Caption = elemento.titulo;
+                            data.Columns.Add(column);
                         }
 
+                        #endregion
                     }
-                    if (line.Substring(0, 2).Equals("DD") && data != null && numVal > 0 && elementos != null)
+
+                    if (line.Substring(0, 2).Equals("DD") && data != null && elementos != null)
                     {
                         try
                         {
@@ -280,9 +261,7 @@ namespace AdmRecaudacion
                                 var str = line.Substring(elemento.valueX, elemento.valueY);
                                 var tipo = elemento.type;
                                 if (str.Trim().Equals("") && tipo!="string")
-                                {
                                     str = "0";
-                                }
 
                                 switch (tipo)
                                 {
@@ -324,13 +303,23 @@ namespace AdmRecaudacion
                         {
                             MessageBox.Show(e.ToString());
                         }
-                        counter++;
+                        
                     }
-
+                    counter++;
                 }
             }
+
             if (data != null)
+            {
                 dataGridView1.DataSource = data;
+                foreach (DataGridViewColumn col in dataGridView1.Columns)
+                {
+                    var nom = data.Columns[col.DataPropertyName].Caption;
+                    if (!nom.ToString().Trim().Equals(""))
+                        col.HeaderText = nom;
+                }
+            }
+
             return counter;
 
         }

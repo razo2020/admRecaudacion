@@ -1,46 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <BANCOS>
   <BANCO key="BCP" name="BANCO DE CREDITO DEL PERU">
-    <CONF key="CREP" url="">
-      <col key="TIP-REG" valueX="0" valueY="2" type="string" >Tipo de Registro</col>
-      <col key="COD-SUC" valueX="2" valueY="3" type="short" >Codigo de Sucursal</col>
-      <col key="COD-MON" valueX="5" valueY="1" type="char" >Codigo de Moneda</col>
+    <CONF key="CREP" name="" url="">
+      <col key="TIP-REG" valueX="0" valueY="2" type="string" valor="DD">Tipo de registro</col>
+      <col key="COD-SUC" valueX="2" valueY="3" type="short" >Codigo de sucursal</col>
+      <col key="COD-MON" valueX="5" valueY="1" type="char" >Codigo de moneda</col>
       <col key="NRO-CUE" valueX="6" valueY="7" type="int" >Número de cuenta</col>
-
-      <col key="RUC-ENT" valueX="16" valueY="11" type="string"/>
-
-      <col key="FEC-REG" valueX="57" valueY="8" type="date" />
-
-      <col key="IMP-TRA" valueX="73" valueY="15" type="double" />
-
-      <col key="COD-OFI" valueX="118" valueY="6" type="int" />
-      <col key="NRO-OPE" valueX="124" valueY="6" type="int" />
-
-      <col key="COD-BAN" valueX="184" valueY="2" type="byte" />
-      <col key="IND-BCO" valueX="186" valueY="1" type="char" />
-      <col key="NRO-OPE-BD" valueX="187" valueY="8" type="int" />
-      <col key="NRO-OPE-CAN" valueX="195" valueY="8" type="int" />
-
+      <col key="RUC-ENT" valueX="16" valueY="11" type="string">RUC del cliente</col>
+      <col key="FEC-REG" valueX="57" valueY="8" type="date" >Fecha de registro</col>
+      <col key="IMP-TRA" valueX="73" valueY="15" type="double">Importe de la transacción</col>
+      <col key="COD-OFI" valueX="118" valueY="6" type="int" >Código de oficina</col>
+      <col key="NRO-OPE" valueX="124" valueY="6" type="int">Número de operación</col>
+      <col key="COD-BAN" valueX="184" valueY="2" type="byte" >Código bancario</col>
+      <col key="IND-BCO" valueX="186" valueY="1" type="char" >Indicador de registro</col>
+      <col key="NRO-OPE-BD" valueX="187" valueY="8" type="int" >Número de operación DB</col>
+      <col key="NRO-OPE-CAN" valueX="195" valueY="8" type="int" >Número de operación canal</col>
     </CONF>
-    <CONF key="CDPG" url="">
+    <CONF key="CDPG" name="" url="">
       <col key="TIP-REG" valueX="0" valueY="2" type="string" />
       <col key="COD-SUC" valueX="2" valueY="3" type="short" />
       <col key="COD-MON" valueX="5" valueY="1" type="char" />
       <col key="NRO-CUE" valueX="6" valueY="7" type="int" />
-
       <col key="RUC-ENT" valueX="16" valueY="11" type="string"/>
-
       <col key="FEC-REG" valueX="57" valueY="8" type="date" />
-
       <col key="IMP-TRA" valueX="73" valueY="15" type="double" />
-
       <col key="COD-OFI" valueX="118" valueY="6" type="int" />
       <col key="NRO-OPE" valueX="124" valueY="6" type="int" />
-
       <col key="COD-BAN" valueX="184" valueY="2" type="byte" />
     </CONF>
   </BANCO>
-  <BANCO key="INB" name="BANCO INTERBANK"><CONF key="CREP" url=""> </CONF></BANCO>
-  <BANCO key="BBVA" name="BBVA BANCO CONTINENTAL"><CONF key="CREP" url=""> </CONF></BANCO>
-  <BANCO key="SCB" name="SCOTIABANK PERU SAA"><CONF key="CREP" url=""> </CONF></BANCO>
+  <BANCO key="INB" name="BANCO INTERBANK">
+    <CONF key="CREP" name="" url="">
+      <!--columnas-->
+    </CONF>
+  </BANCO>
+  <BANCO key="BBVA" name="BBVA BANCO CONTINENTAL">
+    <CONF key="CREP" name="" url="">
+      <!--columnas-->
+    </CONF>
+  </BANCO>
+  <BANCO key="SCB" name="SCOTIABANK PERU SAA">
+    <CONF key="CREP" name="" url=""> 
+      <!--columnas-->
+    </CONF>
+  </BANCO>
 </BANCOS>

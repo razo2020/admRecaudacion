@@ -17,6 +17,7 @@ namespace AdmRecaudacion
             public string type { get; set; }
             public int valueX { get; set; }
             public int valueY { get; set; }
+            public string very { get; set; }
             public Element[] url { get; set; }
             public override string ToString() { return key +": "+ titulo; }
         }
@@ -33,6 +34,7 @@ namespace AdmRecaudacion
             var confi = from conf in bancos.Elements("CONF")
                         where (string)conf.Attribute("key") == Config
                         select conf;
+
             var column = from col in confi.Elements("col")
                 select new Element
                 {
@@ -40,6 +42,7 @@ namespace AdmRecaudacion
                     valueX = Convert.ToInt32(col.Attribute("valueX").Value),
                     valueY = Convert.ToInt16(col.Attribute("valueY").Value),
                     type = (string)col.Attribute("type").Value,
+                    very = col.Attribute("valor") != null ? col.Attribute("valor").Value : "",
                     titulo = col.Value
                 };//Fin de consulta.
             List<Element> elementos = column.ToList<Element>();
